@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по переводу слов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌍 Тест по переводу слов 🇷🇺➡️🇬🇧</h1>
+
+        <div class="controls">
+            <label>
+                <input type="radio" name="direction" value="ru_to_en" checked> 
+                Русский → Английский
+            </label>
+            <label>
+                <input type="radio" name="direction" value="en_to_ru"> 
+                Английский → Русский
+            </label>
+        </div>
+
+        <div id="word-display" class="word-box">Нажмите "Начать", чтобы начать тест.</div>
+
+        <input type="text" id="user-input" placeholder="Введите ответ здесь..." autocomplete="off">
+        
+        <div class="button-group">
+            <button id="check-btn">Проверить</button>
+            <button id="reset-btn">Начать заново</button>
+        </div>
+
+        <div id="result-box" class="hidden">
+            <h2>Результаты теста</h2>
+            <p id="final-score"></p>
+            <p id="mistakes-list"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

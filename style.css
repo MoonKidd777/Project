@@ -1,0 +1,74 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* Бирюзовый фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+h1 {
+    color: #004d40; /* Темно-зеленый */
+    margin-bottom: 25px;
+}
+
+.word-box {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00695c; /* Сине-зеленый */
+    margin: 25px 0;
+    min-height: 40px;
+}
+
+#user-input {
+    width: 80%;
+    padding: 12px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    border: 2px solid #b2dfdb;
+    border-radius: 8px;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-around;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#check-btn {
+    background-color: #2e7d32; /* Темно-зеленый */
+    color: white;
+}
+
+#reset-btn {
+    background-color: #c62828; /* Темно-красный */
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+.controls label {
+    margin-right: 25px;
+}

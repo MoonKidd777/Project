@@ -7,54 +7,35 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Верхняя панель -->
-        <header class="header">
-            <h1>Тест по переводу слов</h1>
-            <div class="flags">
-                <span class="flag">🇷🇺</span>
-                <span class="arrow">→</span>
-                <span class="flag">🇬🇧</span>
-            </div>
-        </header>
 
-        <!-- Панель управления направлением -->
+    <div class="container">
+        <h1>🌍 Тест по переводу слов 🇷🇺➡️🇬🇧</h1>
+
         <div class="controls">
             <label>
-                <input type="radio" name="direction" value="ru_to_en" checked> Русский → Английский
+                <input type="radio" name="direction" value="ru_to_en" checked> 
+                Русский → Английский
             </label>
             <label>
-                <input type="radio" name="direction" value="en_to_ru"> Английский → Русский
+                <input type="radio" name="direction" value="en_to_ru"> 
+                Английский → Русский
             </label>
         </div>
 
-        <!-- Основной блок с вопросом -->
-        <main class="main-content">
-            <div id="word-display" class="word-display">
-                <p>Нажмите "Начать", чтобы начать тест.</p>
-            </div>
+        <div id="word-display" class="word-box">Нажмите "Начать", чтобы начать тест.</div>
 
-            <div class="input-area">
-                <input type="text" id="answer-input" placeholder="Введите перевод..." disabled>
-                <button id="check-btn" disabled>Проверить</button>
-                <button id="start-btn">Начать</button>
-            </div>
-        </main>
-
-        <!-- Индикатор прогресса -->
-        <div class="progress-section">
-            <p>Ваш прогресс:</p>
-            <div class="progress-bar-outer">
-                <div id="progress-bar-fill" class="progress-bar-inner"></div>
-            </div>
-            <p id="stats-info">Верных ответов: 0 | Ошибок: 0 | Осталось: 0</p>
+        <input type="text" id="user-input" placeholder="Введите ответ здесь..." autocomplete="off">
+        
+        <div class="button-group">
+            <button id="check-btn">Проверить</button>
+            <button id="reset-btn">Начать заново</button>
         </div>
 
-        <!-- Блок для результатов и ошибок -->
-        <footer class="footer">
-            <p id="result-message"></p>
+        <div id="result-box" class="hidden">
+            <h2>Результаты теста</h2>
+            <p id="final-score"></p>
             <p id="mistakes-list"></p>
-        </footer>
+        </div>
     </div>
 
     <script src="script.js"></script>

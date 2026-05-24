@@ -1,4 +1,4 @@
-// --- Словарь ---
+// --- Данные ---
 const WORDS = {
     "Яблоко": "apple",
     "Банан": "banana",
@@ -6,132 +6,158 @@ const WORDS = {
     "Собака": "dog",
     "Дом": "house",
     "Машина": "car",
-    "Книга": "book"
+    "Книга": "book",
+    "horse": "лошадь",
+    "frog": "лягушка",
+    "bear": "медведь",
+    "mouse": "мышь",
+    "mice": "мыши",
+    "monkey": "обезьяна",
+    "pig": "свинья",
+    "elephant": "слон",
+    "duck": "утка"
 };
+
+// --- Состояние приложения ---
+let wordsList = [];
+let currentIndex = 0;
+let stats = { correct: 0, mistakes: 0 };
+let mistakesList = [];
+let alreadyMistaked = false;
+let correctAnswer = '';
+let wordForLog = '';
 
 // --- Элементы DOM ---
 const wordDisplay = document.getElementById('word-display');
-const userInput = document.getElementById('user-input');
+const answerInput = document.getElementById('answer-input');
 const checkBtn = document.getElementById('check-btn');
-const resetBtn = document.getElementById('reset-btn');
-const resultBox = document.getElementById('result-box');
-const finalScore = document.getElementById('final-score');
-const mistakesList = document.getElementById('mistakes-list');
-const directionRadios = document.querySelectorAll('input[name="direction"]');
-
-// --- Состояние игры ---
-let wordsArray = [];
-let currentIndex = 0;
-let stats = { correct: 0, mistakes: 0 };
-let mistakesLog = [];
-let alreadyMistaked = false; // Флаг для логики "ошибка + исправление = 0 баллов"
-let currentCorrectAnswer = '';
-let wordForLog = ''; // Какое слово записывать в лог ошибок
+const startBtn = document.getElementById('start-btn');
+const progressBarFill = document.getElementById('progress-bar-fill');
+const statsInfo = document.getElementById('stats-info');
+const resultMessage = document.getElementById('result-message');
+const mistakesListElem = document.getElementById('mistakes-list');
 
 // --- Функции ---
-function shuffleArray(array) {
-    // Перемешивание массива (Алгоритм Фишера-Йетса)
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
 
-function resetGame() {
-    // Сброс игры при старте или смене направления
-    wordsArray = Object.entries(WORDS);
-    shuffleArray(wordsArray);
+function resetAndUpdate() {
+    // Создаем копию массива слов и перемешиваем его
+    wordsList = Object.entries(WORDS);
+    wordsList.sort(() => Math.random() - 0.5);
     
     currentIndex = 0;
     stats = { correct: 0, mistakes: 0 };
-    mistakesLog = [];
+    mistakesList = [];
     alreadyMistaked = false;
     
-    resultBox.classList.add('hidden');
-    
     updateWordDisplay();
+    updateProgress();
 }
 
 function updateWordDisplay() {
-    if (currentIndex < wordsArray.length) {
-        const [ruWord, enWord] = wordsArray[currentIndex];
+    if (currentIndex < wordsList.length) {
+        const [ruWord, enWord] = wordsList[currentIndex];
+        
         const direction = document.querySelector('input[name="direction"]:checked').value;
         
         if (direction === 'ru_to_en') {
             wordDisplay.textContent = `Введите перевод (RU → EN): ${ruWord}`;
-            currentCorrectAnswer = enWord.toLowerCase();
-            wordForLog = ruWord; // Логируем русское слово
+            correctAnswer = enWord.toLowerCase();
+            wordForLog = ruWord;
         } else {
             wordDisplay.textContent = `Введите перевод (EN → RU): ${enWord}`;
-            currentCorrectAnswer = ruWord.toLowerCase();
-            wordForLog = enWord; // Логируем английское слово
+            correctAnswer = ruWord.toLowerCase();
+            wordForLog = enWord;
         }
         
-        userInput.value = '';
-        userInput.disabled = false;
+        answerInput.value = '';
+        answerInput.disabled = false;
         checkBtn.disabled = false;
-        userInput.focus();
         
+        resultMessage.textContent = '';
+        mistakesListElem.textContent = '';
     } else {
         showResults();
     }
 }
 
 function checkAnswer() {
-    const userAnswer = userInput.value.trim().toLowerCase();
-    
-    if (userAnswer === currentCorrectAnswer) {
-        // Логика подсчета баллов согласно вашему требованию:
+    const userAnswer = answerInput.value.trim().toLowerCase();
+
+    if (userAnswer === correctAnswer) {
         if (!alreadyMistaked) {
-            stats.correct += 1; // +1 балл только если не было ошибок
+            stats.correct++;
         }
         
         currentIndex++;
-        alreadyMistaked = false; // Сбрасываем флаг для следующего слова
+        alreadyMistaked = false;
         
-        updateWordDisplay();
-        
+        if (currentIndex < wordsList.length) {
+            updateWordDisplay();
+        } else {
+            showResults();
+        }
     } else {
-        // Ошибка
         if (!alreadyMistaked) {
-            stats.mistakes += 1;
+            stats.mistakes++;
             
-            if (!mistakesLog.includes(wordForLog)) {
-                mistakesLog.push(wordForLog);
+            if (!mistakesList.includes(wordForLog)) {
+                mistakesList.push(wordForLog);
+                mistakesListElem.textContent += `❌ ${wordForLog}\n`;
+                
+                resultMessage.textContent = `Ошибка! Правильный ответ: ${correctAnswer.charAt(0).toUpperCase() + correctAnswer.slice(1)}`;
+                resultMessage.style.color = '#c62828';
+                
+                setTimeout(() => {
+                    resultMessage.textContent = '';
+                }, 2000);
+                
+                alreadyMistaked = true;
+                answerInput.value = ''; // Очищаем поле для новой попытки
+                answerInput.focus();
+                return; // Не обновляем слово, даем шанс исправить ошибку
             }
-            
-            alert(`❌ Ошибка! Правильный ответ: ${currentCorrectAnswer.charAt(0).toUpperCase() + currentCorrectAnswer.slice(1)}`);
-            
-            alreadyMistaked = true; // Устанавливаем флаг, что ошибка уже была на этом слове
         }
         
-        userInput.value = ''; // Очищаем поле ввода после ошибки
-        userInput.focus();
+        // Если слово уже в списке ошибок, просто очищаем поле
+        answerInput.value = '';
+        answerInput.focus();
     }
+    
+    updateProgress();
+}
+
+function updateProgress() {
+    const total = wordsList.length;
+    const remaining = total - currentIndex;
+    
+    // Обновляем текст статистики
+    statsInfo.textContent = `Верных ответов: ${stats.correct} | Ошибок: ${stats.mistakes} | Осталось: ${remaining}`;
+    
+    // Обновляем прогресс-бар (от 0 до 100%)
+    const percentComplete = (currentIndex / total) * 100;
+    progressBarFill.style.width = `${percentComplete}%`;
 }
 
 function showResults() {
-    wordDisplay.textContent = '';
-    userInput.disabled = true;
+    // Скрываем элементы ввода
+    answerInput.disabled = true;
+    checkBtn.disabled = true;
     
-    finalScore.textContent = `✅ Правильных ответов: ${stats.correct}\n❌ Ошибок допущено: ${stats.mistakes}`;
+    // Показываем финальный результат
+    resultMessage.innerHTML = `
+        🎉 Тест завершён!<br><br>
+        ✅ Правильных ответов: ${stats.correct}<br>
+        ❌ Ошибок: ${stats.mistakes}<br><br>
+    `;
     
-    if (mistakesLog.length > 0) {
-        mistakesList.textContent = `Слова с ошибками:\n${mistakesLog.join(', ')}`;
-    } else {
-        mistakesList.textContent = 'Слова с ошибками:\n—';
-    }
-    
-    resultBox.classList.remove('hidden');
+    mistakesListElem.textContent = mistakesList.length > 0 ? `Слова с ошибками:\n${mistakesList.join(', ')}` : 'Ошибок не было! Отличная работа!';
 }
 
-// --- Слушатели событий ---
+// --- События ---
+startBtn.addEventListener('click', resetAndUpdate);
 checkBtn.addEventListener('click', checkAnswer);
-resetBtn.addEventListener('click', resetGame);
-directionRadios.forEach(radio => radio.addEventListener('change', resetGame));
-userInput.addEventListener('keydown', function(event) {
-   if (event.key === 'Enter') checkAnswer(); 
+answerInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkAnswer();
+    }
 });
-
-// Запуск игры при загрузке страницы
-document.addEventListener('DOMContentLoaded', resetGame);

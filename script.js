@@ -7,7 +7,7 @@ const WORDS = {
     "Дом": "house",
     "Машина": "car",
     "Книга": "book",
-    "Мама": "mother",
+    "Мама": "mother",       // Новые слова
     "Дерево": "tree",
     "Школа": "school",
     "Учитель": "teacher"

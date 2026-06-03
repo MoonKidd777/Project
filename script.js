@@ -10,7 +10,17 @@ const WORDS = {
     "Мама": "mother",       // Новые слова
     "Дерево": "tree",
     "Школа": "school",
-    "Учитель": "teacher"
+    "Учитель": "teacher",
+    "Девочка": "girl",
+    "Мальчик": "boy",
+    "Друг": "friend",
+    "Класс": "classroom",
+    "Игрушка": "toy",
+    "Утро": "morning",
+    "Вечер": "evening",
+    "Завтрак": "breakfast",
+    "Обед": "lunch",
+    "Ужин": "dinner"
 };
 
 // --- Элементы DOM ---
